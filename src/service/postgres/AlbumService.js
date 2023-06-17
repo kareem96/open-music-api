@@ -8,7 +8,6 @@ class AlbumService{
         this._pool = new Pool();
     }
 
-
     async getAlbum(){
         const result = await this._pool.query('select id, name, year from albums');
         return result.rows;
