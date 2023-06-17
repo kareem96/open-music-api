@@ -1,4 +1,3 @@
-const ClientError = require('../../exception/ClientError');
 const autoBind = require('auto-bind');
 
 class SongsHandler {
