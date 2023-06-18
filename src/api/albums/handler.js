@@ -38,7 +38,7 @@ class AlbumHandler{
     async putAlbumByIdHandler(request, h){
         this._validator.validateAlbumPayload(request.payload);
             const{id} = request.params;
-            await this._service.editAlbumId(id, request.payload);
+            await this._service.editAlbumById(id, request.payload);
 
             return {
                 status:'success',
@@ -47,7 +47,6 @@ class AlbumHandler{
     }
 
     async deleteAlbumByIdHandler(request, h){
-        this._validator.validateAlbumPayload(request.payload);
         const{id} = request.params;
         await this._service.deleteAlbumId(id, request.payload);
         return {

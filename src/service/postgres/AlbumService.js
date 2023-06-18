@@ -13,7 +13,7 @@ class AlbumService{
         return result.rows;
     }
 
-    async getAlbumById(id){
+    async getAlbumById({id}){
         const query = {
             text: 'select * from albums where id = $1',
             values: [id],
