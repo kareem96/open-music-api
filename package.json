@@ -8,7 +8,7 @@
     "lint": "eslint ./src",
     "migrate": "node-pg-migrate"
   },
-  "author": "",
+  "author": "kareemdev",
   "license": "ISC",
   "keywords": [],
   "description": "",

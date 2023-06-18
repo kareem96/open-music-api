@@ -20,7 +20,7 @@ class AlbumHandler{
     }
 
     async postAlbumHandler(request, h){
-        this._validator.validateAlbumPaylod(request.payload);
+        this._validator.validateAlbumPayload(request.payload);
             const{name, year} = request.payload;
             const albumId = await this._service.addAlbum({name, year});
 
@@ -36,7 +36,7 @@ class AlbumHandler{
     }
 
     async putAlbumByIdHandler(request, h){
-        this._validator.validateAlbumPaylod(request.payload);
+        this._validator.validateAlbumPayload(request.payload);
             const{id} = request.params;
             await this._service.editAlbumId(id, request.payload);
 
@@ -47,9 +47,9 @@ class AlbumHandler{
     }
 
     async deleteAlbumByIdHandler(request, h){
-        this._validator.validateAlbumPaylod(request.payload);
+        this._validator.validateAlbumPayload(request.payload);
         const{id} = request.params;
-        await this._service.editAlbumId(id, request.payload);
+        await this._service.deleteAlbumId(id, request.payload);
         return {
             status:'success',
             message: 'Album berhasil dihapus'
