@@ -48,7 +48,7 @@ class AlbumHandler{
 
     async deleteAlbumByIdHandler(request, h){
         const{id} = request.params;
-        await this._service.deleteAlbumId(id, request.payload);
+        await this._service.deleteAlbumById(id, request.payload);
         return {
             status:'success',
             message: 'Album berhasil dihapus'

@@ -42,7 +42,7 @@ class SongService{
 
     async editSongById(id, {title, year, genre, performer, duration}){
         const query ={
-            text: 'update songs set title =$1, year =$2, performer = $3, genre=$4, duration=$5 where id = $6 RETURNING id',
+            text: 'update songs set title = $1, year = $2, genre = $3, performer = $4, duration=$5 where id = $6 RETURNING id',
             values: [title, year, genre, performer, duration, id]
         }    
         const result = await this._pool.query(query);
