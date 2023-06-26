@@ -60,7 +60,7 @@ class UserServie{
         if(!rows.length){
             throw new AuthenticationError('Credentials yang anada berikan salah');
         }
-        const {id, password, hashedPassword} = rows[0];
+        const {id, password: hashedPassword} = rows[0];
         const match = await bcrypt.compare(password, hashedPassword);
         if(!match){
              throw new AuthenticationError('Credentials yang anda berikan salah');
