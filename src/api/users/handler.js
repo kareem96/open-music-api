@@ -25,12 +25,14 @@ class UsersHandler{
         await this._validator.validateUserPayload(request.payload);
         const {username, password, fullname} = request.payload;
         const userId = await this._service.addUser({username, password, fullname});
-        const repsonse = h.response({
+        const response = h.response({
             status: 'success',
             data:{
                 userId,
             }
         });
+        response.code(201);
+        return response;
     }
 }
 

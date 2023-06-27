@@ -11,7 +11,7 @@ class AuthenticationsHandler{
     }
 
     async postAuthenticationHandler(request, h){
-        await this.validator.validatePostPayload(request.payload);
+        await this.validator.validatorPostPayload(request.payload);
         const {username, password} = request.payload;
         const id = await this._usersService.verifyUserCredential(username, password);
         const accessToken = this._tokenManager.generateAccessToken({id});
@@ -30,11 +30,11 @@ class AuthenticationsHandler{
         return response;
     }
     async putAuthenticationHandler(request, h){
-        await this.validator.validatePutPayload(requuest.payload);
+        await this.validator.validatorPutPayload(request.payload);
         const {refreshToken} = request.payload;
 
         await this._authenticationsService.verifyRefreshToken(refreshToken)
-        const {id} = this._tokenManager.verifyRereshToken(refreshToken);
+        const {id} = this._tokenManager.verifyRefreshToken(refreshToken);
         const accessToken = this._tokenManager.generateAccessToken({id});
     
 
@@ -48,8 +48,8 @@ class AuthenticationsHandler{
         response.code(200);
         return response;
     }
-    async delteAuthenticationHandler(request, h){
-        await this.validator.validateDeletePayload(request.payload);
+    async deleteAuthenticationHandler(request, h){
+        await this.validator.validatorDeletePayload(request.payload);
         const {refreshToken} = request.payload;
 
         await this._authenticationsService.deleteRefreshToken(refreshToken)

@@ -9,12 +9,12 @@ class AuthenticationsService{
     async addRefreshToken(token){
         const query = {
             text: 'insert into authentications VALUES($1)',
-            vailues: [token],
+            values: [token],
         };
         await this._pool.query(query);
     }
 
-    async verifyRefershToken(token){
+    async verifyRefreshToken(token){
         const query = {
             text: 'select token from atuhentications where token = $1',
             values: [token],
