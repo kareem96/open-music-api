@@ -13,7 +13,7 @@ exports.up = (pgm) => {
             notNull: true
         },
         song_id:{
-            tyoe: 'VARCHAR(50)',
+            type: 'VARCHAR(50)',
             notNull: true,
         }
     });
