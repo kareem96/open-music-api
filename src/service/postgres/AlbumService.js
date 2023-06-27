@@ -25,18 +25,21 @@ class AlbumService{
         return result.rows[0];
     }
 
-    async addAlbum({name, year}){
-        const id = `album-${nanoid(16)}`;
+    async addAlbum({ name, year }) {
+        const albumId = 'album-'.concat(nanoid(16));
+    
         const query = {
-            text: 'insert into albums values($1, $2, $3) RETURNING id',
-            values: [id, name, year],
+          text: 'INSERT INTO albums VALUES($1, $2, $3) RETURNING id',
+          values: [albumId, name, year],
         };
+    
         const result = await this._pool.query(query);
-        if(!result.rows[0].id){
-            throw new InvariantError('Album gagal ditambahakan');
+        if (!result.rows[0].id) {
+          throw new InvariantError('Gagal menambahkan album');
         }
-        return result.rows[0].id;
-    }
+    
+        return albumId;
+      }
 
     async editAlbumById(id, {name, year}){
         const query = {

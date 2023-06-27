@@ -10,7 +10,7 @@ class UserServie{
         this._pool = new Pool();
     }
 
-    async adduser({username, password, fullname}){
+    async addUser({username, password, fullname}){
         await this._verifyNewuserName(username);
         const id = `user-${nanoid(16)}`;
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -40,7 +40,7 @@ class UserServie{
         return rows[0];
     }
 
-    async verifynewUsernmae(username){
+    async verifyNewUsernmae(username){
         const query= {
             text: 'select id from users where username = $1',
             values: [username]

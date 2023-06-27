@@ -3,7 +3,7 @@
 exports.shorthands = undefined;
 
 exports.up = (pgm) => {
-    pgm.createTable('playlist', {
+    pgm.createTable('playlist_songs', {
         id:{
             type: 'VARCHAR(50)',
             primaryKey: true
@@ -31,7 +31,7 @@ exports.up = (pgm) => {
     pgm.addConstraint(
         'playlist_songs',
         'fk_playlist_songs.song_id_songs.id',
-        'FOREIGN KEY(playlist_id) REFERENCES osngs(id) ON DELETE CASCADE',
+        'FOREIGN KEY(playlist_id) REFERENCES songs(id) ON DELETE CASCADE',
     );
 };
 
