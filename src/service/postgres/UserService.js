@@ -11,7 +11,7 @@ class UserServie{
     }
 
     async addUser({username, password, fullname}){
-        await this._verifyNewUsername(username);
+        await this.verifyNewUsername(username);
         const id = `user-${nanoid(16)}`;
         const hashedPassword = await bcrypt.hash(password, 10);
 
