@@ -11,6 +11,8 @@ exports.up = (pgm) => {
       notNull: true,
       foreignKeys: true,
       references: 'playlists(id)',
+      onDelete: 'cascasde',
+      onUpdate: 'cascasde',
     },
     song_id: {
       type: 'VARCHAR(50)',
