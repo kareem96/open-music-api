@@ -9,13 +9,13 @@ exports.up = (pgm) => {
     playlist_id: {
       type: 'VARCHAR(50)',
       notNull: true,
-      reference: 'playlists(id)',
+      references: 'playlists(id)',
       foreignKeys: true,
     },
     song_id: {
       type: 'VARCHAR(50)',
       notNull: true,
-      reference: 'songs(id)',
+      references: 'songs(id)',
       foreignKeys: true,
     },
   });

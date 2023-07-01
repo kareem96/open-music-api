@@ -27,7 +27,7 @@ module.exports = class PlaylistsService {
 
   async getPlaylists(owner) {
     const res = await this._pool.query({
-      text: `select p.id, p.name, u.username rom playlists p
+      text: `select p.id, p.name, u.username from playlists p
              left join collaborations c on c.playlist_id = p.id
              left join users u ON u.id = p.owner
              where p.owner = $1 OR c.user_id = $1`,
