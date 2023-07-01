@@ -1,19 +1,21 @@
 const InvariantError = require('../../exception/InvariantError');
-const {CollaborationSchema} = require('./schema');
+const {PostCollaborationPayloadSchema, DeleteCollaborationPayloadSchema} = require('./schema');
 
-const CollaborationValidator ={
-    validatePostCollaborationPayload: (payload) =>{
-        const validatorResult = CollaborationSchema.validate(payload);
-        if(validatorResult.error){
-            throw new InvariantError(validatorResult.error.message);
-        }
-    },
-    validateDeleteCollaborationPayload: (payload) =>{
-        const validatorResult = CollaborationSchema.validate(payload);
-        if(validatorResult.error){
-            throw new InvariantError(validatorResult.error.message);
-        }
-    },
+const CollaborationsValidator = {
+  validatePostCollaborationPayload: (payload) => {
+    const validationResult = PostCollaborationPayloadSchema.validate(payload);
+
+    if (validationResult.error) {
+      throw new InvariantError(validationResult.error.message);
+    }
+  },
+  validateDeleteCollaborationPayload: (payload) => {
+    const validationResult = DeleteCollaborationPayloadSchema.validate(payload);
+
+    if (validationResult.error) {
+      throw new InvariantError(validationResult.error.message);
+    }
+  },
 };
 
-module.exports = CollaborationValidator;
+module.exports = CollaborationsValidator;

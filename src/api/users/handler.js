@@ -1,39 +1,37 @@
-const autoBind = require("auto-bind");
+module.exports = class UsersHandler {
+  constructor(service, validator) {
+    this._service = service;
+    this._validator = validator;
+  }
 
-class UsersHandler{
-    constructor(service, validator){
-        this._service = service;
-        this._validator = validator;
-        autoBind(this);
+  async postUserHandler(req, h) {
+    this._validator.validateUserPayload(req.payload);
+    const userId = await this._service.addUser(req.payload);
+
+    return this._renderResponse(h, {
+      data: {userId},
+      statusCode: 201,
+    });
+  }
+
+  _renderResponse(h, {msg, data, statusCode = 200}) {
+    const resObj = {
+      status: 'success',
+      message: msg,
+      data: data,
+    };
+
+    if (msg === null) {
+      delete resObj['message'];
     }
 
-    async getUserByIdHandler(request, h){
-        const {id} = request.params;
-        const user = await this._service.getUserById(id);
-        const response = h.response({
-            status: 'success',
-            data : {
-                user,
-            }
-        });
-        response.code(200);
-        return response;
+    if (data === null) {
+      delete resObj['data'];
     }
 
+    const res = h.response(resObj);
+    res.code(statusCode);
 
-    async postUserHandler(request, h){
-        await this._validator.validateUserPayload(request.payload);
-        const userId = await this._service.addUser(request.payload);
-        
-        const response = h.response({
-            status: 'success',
-            data:{
-                userId,
-            }
-        });
-        response.code(201);
-        return response;
-    }
-}
-
-module.exports = UsersHandler;
+    return res;
+  }
+};

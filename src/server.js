@@ -1,41 +1,42 @@
 require('dotenv').config();
 const Hapi = require('@hapi/hapi');
 const Jwt = require('@hapi/jwt');
+const ClientError = require('./exception/ClientError');
 
+const AlbumsService = require('./service/postgres/AlbumService');
+const albums = require('./api/albums');
+const AlbumsValidator = require('./validator/albums');
+
+const SongsService = require('./service/postgres/SongService');
 const songs = require('./api/songs');
-const SongService = require('./service/postgres/SongService');
 const SongsValidator = require('./validator/songs');
 
-const albums = require('./api/albums');
-const AlbumService = require('./service/postgres/AlbumService');
-const AlbumValidator = require('./validator/albums');
-const ClientError = require('./exception/ClientError');
+const UsersService = require('./service/postgres/UserService');
+const users = require('./api/users');
+const UsersValidator = require('./validator/user');
 
 const authentications = require('./api/authentications');
 const AuthenticationsService = require('./service/postgres/AuthenticationsService');
-const AuthenticationValidator = require('./validator/authentication/index');
 const TokenManager = require('./tokenize/TokenManager');
+const AuthenticationsValidator = require('./validator/authentication');
 
-const collaborations = require('./api/collaborations');
+const PlaylistsService = require('./service/postgres/PlaylistService');
+const playlists = require('./api/playlist');
+const PlaylistsValidator = require('./validator/playlist');
+
 const CollaborationsService = require('./service/postgres/CollaborationsService');
+const collaborations = require('./api/collaborations');
 const CollaborationsValidator = require('./validator/collaboration');
 
-const playlist = require('./api/playlist');
-const PlaylistService = require('./service/postgres/PlaylistService');
-const PlaylistValidator = require('./validator/collaboration');
-
-const users = require('./api/users');
-const UsersService = require('./service/postgres/UserService');
-const UsersValidator = require('./validator/user');
+const PlayListActivitiesService = require('./service/postgres/PlaylistActivitiesService');
 
 
 const init = async () =>{
-    const albumService = new AlbumService();
-    const authenticationsService = new AuthenticationsService();
-    const collaborationsService = new CollaborationsService();
-    const playlistService = new PlaylistService(collaborationsService);
-    const songService = new SongService();
-    const usersService = new UsersService();
+  const songsService = new SongsService();
+  const usersService = new UsersService();
+  const collaborationService = new CollaborationsService();
+  const playlistsService = new PlaylistsService(collaborationService);
+  const activitiesService = new PlayListActivitiesService();
 
     const server = Hapi.server({
         port: process.env.PORT,
@@ -103,14 +104,14 @@ const init = async () =>{
       {
         plugin: albums,
         options: {
-          service: albumService,
-          validator: AlbumValidator,
+          service: new AlbumsService(),
+          validator: AlbumsValidator,
         },
       },
       {
         plugin: songs,
         options: {
-          service: songService,
+          service: songsService,
           validator: SongsValidator,
         },
       },
@@ -124,30 +125,32 @@ const init = async () =>{
       {
         plugin: authentications,
         options: {
-          authenticationsService,
-          usersService,
+          authenticationsService: new AuthenticationsService(),
+          usersService: new UsersService(),
           tokenManager: TokenManager,
-          validator: AuthenticationValidator,
+          validator: AuthenticationsValidator,
         },
       },
       {
-        plugin: playlist,
+        plugin: playlists,
         options: {
-          playlistService,
-          songService,
-          validator: PlaylistValidator,
+          playlistsService: playlistsService,
+          activitiesService: activitiesService,
+          songsService: songsService,
+          validator: PlaylistsValidator,
         },
       },
       {
         plugin: collaborations,
         options: {
-          collaborationsService,
+          collaborationsService: new CollaborationsService(),
+          playlistsService,
           usersService,
-          playlistService,
           validator: CollaborationsValidator,
         },
       },
     ]);
+  
 
     await server.start();
     console.log(`Server berjalan pada ${server.info.uri}`);
