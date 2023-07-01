@@ -7,12 +7,15 @@ module.exports ={
     register: async (server, {
         collaborationsService, usersService, playlistService, validator,
     }) => {
-        const collaborationsHandler = new CollaborationsHandler(
-            collaborationsService,
-            usersService,
-            playlistService,
-            validator,
+        server.route(
+            routes(
+                new CollaborationsHandler(
+                    collaborationsService,
+                    playlistService,
+                    usersService,
+                    validator,
+                )
+            )
         );
-        server.route(routes(CollaborationsHandler));
-    }
+    },
 };

@@ -1,7 +1,13 @@
 const Joi = require("joi");
 
-const CollaborationSchema = Joi.object({
+const postCollaborationSchema = Joi.object({
     playlistId:Joi.string().required(),
     userId:Joi.string().required(),
 });
-module.exports= {CollaborationSchema};
+
+const deleteCollaborationSchema = Joi.object({
+    playlistId:Joi.string().required(),
+    userId:Joi.string().required(),
+});
+
+module.exports= {postCollaborationSchema, deleteCollaborationSchema};

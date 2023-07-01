@@ -1,7 +1,5 @@
 /* eslint-disable camelcase */
 
-exports.shorthands = undefined;
-
 exports.up = (pgm) => {
     pgm.createTable('playlist_song_activities',{
         id:{
@@ -11,6 +9,8 @@ exports.up = (pgm) => {
         playlist_id:{
             type: 'VARCHAR(50)',
             notNull: true,
+            foreignKeys: true,
+            references: 'playlists(id)'
         },
         song_id:{
             type: 'VARCHAR(50)',
@@ -25,15 +25,12 @@ exports.up = (pgm) => {
             notNull: true,
         },
         time:{
-            type: 'TEXT',
-            notNull: true,
+            type: 'TIMESTAMP',
+            default:  pgm.func('current_timestamp'),
         },
     });
-    pgm.addConstraint(
-        'playlist_song_activities',
-        'fk_playlist_song_activities.playlist_id_playlist.id',
-        'FOREIGN KEY(playlist_id) REFERENCES playlist(id) ON DELETE CASCADE',
-    );
 };
 
-exports.down = (pgm) => {};
+exports.down = (pgm) => {
+    pgm.dropTable('playlist_song_activites');
+};

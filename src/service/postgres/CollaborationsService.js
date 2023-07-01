@@ -26,22 +26,20 @@ class CollaborationsService{
             values: [playlistId, userId],
         }
 
-        const {rows} = await this._pool.query(query);
-        if(!rows.length){
+        const result = await this._pool.query(query);
+        if(!result.rowCount){
             throw new InvariantError('Kollaborasi gagal dihapus');
         }
     }
 
     async verifyCollaborations(playlistId, userId){
-        const query = {
+        const query =  await this._pool.query({
             text: 'select * from collaborations where playlist_id = $1 and user_id = $2',
             values: [playlistId, userId],
-        };
-        const {rows} = await this._pool.query(query);
-        if(!rows.length){
+        })
+        if(!query.rows.length){
             throw new InvariantError('Kollaborasi gagal diverifikasi');
         }
     }
-
-}
+};
 module.exports = CollaborationsService;

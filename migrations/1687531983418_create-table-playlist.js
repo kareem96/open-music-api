@@ -1,9 +1,7 @@
 /* eslint-disable camelcase */
 
-exports.shorthands = undefined;
-
 exports.up = (pgm) => {
-    pgm.createTable('playlist', {
+    pgm.createTable('playlists', {
         id:{
             type: 'VARCHAR(50)',
             primaryKey: true,
@@ -17,14 +15,8 @@ exports.up = (pgm) => {
             notNull: true
         },
     });
-
-    pgm.addConstraint(
-        'playlist',
-        'fk_playlist.owner_user.id',
-        'FOREIGN KEY(owner) REFERENCES users(id) ON DELETE CASCADE',
-    )
 };
 
 exports.down = (pgm) => {
-    pgm.dropTable('playlist');
+    pgm.dropTable('playlists');
 };

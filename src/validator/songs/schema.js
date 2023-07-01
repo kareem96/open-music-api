@@ -1,8 +1,9 @@
 const Joi = require('joi');
+const currentyesr = new Date().getFullYear();
 
 const SongPayloadSchema = Joi.object({
   title: Joi.string().required(),
-  year: Joi.number().integer().required(),
+  year: Joi.number().integer(1900).max(currentyesr).required(),
   genre: Joi.string().required(),
   performer: Joi.string().required(),
   duration: Joi.number(),
