@@ -1,7 +1,9 @@
 module.exports = class AlbumsHandler {
-  constructor(service, validator) {
+  constructor(service, validator, storageService, uploadsValidator) {
     this._service = service;
     this._validator = validator;
+    this._storageService = storageService;
+    this._uploadsValidator = uploadsValidator;
 
     this.postAlbumHandler = this.postAlbumHandler.bind(this);
     this.getAlbumsByIdHandler = this.getAlbumsByIdHandler.bind(this);
@@ -49,6 +51,73 @@ module.exports = class AlbumsHandler {
     return this._renderResponse(h, {
       msg: 'success to delete album',
     });
+  }
+
+  async postCoverAlbumByIdHandler(request, h) {
+    const { id } = request.params;
+    const { cover } = request.payload;
+
+    await this._validator.validateImageHeaders(cover.hapi.headers);
+    const filename = await this._storageService.writeFile(cover, cover.hapi);
+
+    const coverUrl = `http://${process.env.HOST}:${process.env.PORT}/albums/images/${filename}`;
+
+    await this._service.editCoverAlbumById(id, coverUrl);
+
+    const response = h.response({
+      status: "success",
+      message: "Sampul berhasil diunggah",
+    });
+    response.code(201);
+    return response;
+  }
+
+  async postLikeAlbumByIdHandler(request, h) {
+    const { id: albumId } = request.params;
+    const { id: credentialId } = request.auth.credentials;
+
+    await this._service.getAlbumById(albumId);
+    await this._service.verifyLikeAlbumById(albumId, credentialId);
+    await this._service.addLikeAlbumById(albumId, credentialId);
+
+    const response = h.response({
+      status: "success",
+      message: "Like album berhasil ditambahkan",
+    });
+    response.code(201);
+    return response;
+  }
+
+  async deleteLikeAlbumByIdHandler(request, h) {
+    const { id } = request.params;
+    const { id: credentialId } = request.auth.credentials;
+
+    await this._service.deleteLikeAlbumById(id, credentialId);
+
+    const response = h.response({
+      status: "success",
+      message: "Like album berhasil dihapus",
+    });
+    response.code(200);
+    return response;
+  }
+
+  async getLikeAlbumByIdHandler(request, h) {
+    const { id: albumId } = request.params;
+
+    const { likes, cache } = await this._service.getLikeAlbumById(albumId);
+
+    const response = h.response({
+      status: "success",
+      data: {
+        likes,
+      },
+    });
+
+    if (cache) response.header("X-Data-Source", "cache");
+
+    response.code(200);
+    return response;
   }
 
   _renderResponse(h, {msg, data, statusCode = 200}) {
