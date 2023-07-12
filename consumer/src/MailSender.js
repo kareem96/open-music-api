@@ -3,10 +3,10 @@ class MailSender{
     constructor(){
         this._transport = nodemailer.createTransport({
             host: process.env.MAIL_HOST,
-            port: process.env.MAIL_HOST,
+            port: process.env.MAIL_PORT,
             auth: {
                 user: process.env.MAIL_ADDRESS,
-                user: process.env.MAIL_PASSWORD,
+                pass: process.env.MAIL_PASSWORD,
             }
         });
     }
@@ -17,11 +17,10 @@ class MailSender{
             to: targetEmail,
             subject: 'Export Playlist',
             text: 'Terlampir ekspor playlist',
-            attachment:[
+            attachments:[
                 {
                     filename: 'playlist.json',
                     content,
-                    conteType: 'application/json',
                 }
             ]
         };
