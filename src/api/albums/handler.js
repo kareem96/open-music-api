@@ -57,7 +57,7 @@ module.exports = class AlbumsHandler {
     const { id } = request.params;
     const { cover } = request.payload;
 
-    await this.uploadsValidator.validateImageHeaders(cover.hapi.headers);
+    await this._uploadsValidator.validateImageHeaders(cover.hapi.headers);
     const filename = await this._storageService.writeFile(cover, cover.hapi);
 
     const coverUrl = `http://${process.env.HOST}:${process.env.PORT}/albums/images/${filename}`;

@@ -10,10 +10,10 @@ const init = async () => {
     const listener = new Listener(service, sender);
     const connection = await amqp.connect(process.env.RABBITMQ_SERVER);
     const channel = await connection.createChannel();
-    await channel.assertQueue('export:playlist', {
+    await channel.assertQueue('export:playlistsongs', {
        durable: true 
     });
-    channel.consume('export:playlist', listener.listen, {noAck: true});
+    channel.consume('export:playlistsongs', listener.listen, {noAck: true});
     console.log('Server consumer berjalan');
 }
 init();
